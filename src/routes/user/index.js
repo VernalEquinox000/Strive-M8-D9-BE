@@ -28,8 +28,8 @@ router.post("/auth/signup", validateBody(userSignupSchema), signup);
 router.post(
 	"/auth/login",
 	validateBody(userLoginSchema),
-	passport.authenticate("local", { session: false }),
-	login
+	/* passport.authenticate("local", { session: false }),
+	login */
 );
 
 //PROFILE
@@ -61,7 +61,7 @@ router.delete(
 router.get("/:currentUserId/friendlist", getFriendList);
 
 //TEST ROUTE
-router.get(
+/* router.get(
 	"/secret",
 	passport.authenticate("jwt", { session: false }),
 	(req, res) => {
@@ -71,5 +71,5 @@ router.get(
 			next(error);
 		}
 	}
-);
+); */
 module.exports = router;
