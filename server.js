@@ -1,8 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const http = require("http")
+const http = require("http") //need to be added
 const routes = require("./src/routes");
+
+//new stuff for the socket
+const createSocketServer = require("./socket")
 
 const {
 	notFoundHandler,
@@ -16,6 +19,10 @@ const {
 const server = express();
 const port = process.env.PORT;
 const mongodbUri = process.env.MONGODB_URI;
+
+//NEW STUFF----httpServer for socket
+const httpServer = http.createServer(server)
+createSocketServer(httpServer)
 
 // MIDDLEWARES
 server.use(cors());

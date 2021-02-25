@@ -1,30 +1,59 @@
-const RoomModel = require("../services/rooms/schema")
+const RoomModel = require("../models/room")
 
 const addUserToRoom = async ({ username, socketId, room }) => {
   try {
     const user = await RoomModel.findOne({
       name: room,
-      "members.username": username,
+      "members.username": username
     })
 
     if (user) {
-      // if user is already in room let's update sockedId
-
-      await RoomModel.findOneAndUpdate(
-        { name: room, "members.username": username },
-        { "members.$.socketId": socketId }
-      )
+      // user in room? then update socketId
+      await RoomModel.findOneAndUpdate({ 
+        name: room,
+        "members.username": username
+      },
+      {"members.$.socketId": socketId})
     } else {
-      // if it is not let's add it to the members
-      const newRoom = await RoomModel.findOneAndUpdate(
-        { name: room },
-        { $addToSet: { members: { username, socketId } } }
-      )
+      const newRoom = await RoomModel.findOneAndUpdate({
+        name: room,
+      }, {
+        $addToSet: {members: {username, socketId}}
+      })
     }
-    return { username, room }
+    return(username, room)
   } catch (error) {
+
     console.log(error)
+    
   }
 }
 
-module.exports = {addUserToRoom}
+
+
+const getUsersInRoom = async roomName => {
+  try {
+    const room = await RoomModel.findOne({ name: roomName })
+    return room.members
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
+const getUsersBySocket = async (roomName, socketId) => {
+  try {
+    const room = await RoomModel.findOne({ name: roomName })
+    console.log(room)
+    console.log(socketId)
+    const user = room.members.find(user => user.socketId === socketId)
+    return user
+ } catch (error) {
+   
+    console.log(error)
+ }
+}
+
+
+module.exports = {addUserToRoom, getUsersInRoom, getUsersBySocket}
