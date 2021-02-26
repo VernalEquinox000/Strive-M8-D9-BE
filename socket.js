@@ -35,6 +35,15 @@ const createSocketServer = server => {
                 console.log(error)
             }
         })
+        socket.on("sendMessage", async ({ room, message }) => {
+            const user = await getUsersBySocket(room, socket.id)
+            const messageContent = {
+                text: message, sender: user.username, room,
+            }
+            await addMessage(messageContent.sender, room, messageContent.text)
+
+            io.to(room).emit("message", messageContent)
+        })
     })
 }
 

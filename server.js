@@ -47,7 +47,7 @@ mongoose
 	.then(() => console.log("Connected to DB..."))
 	.catch((e) => console.log("DB connection error:", e));
 
-server.listen(port, () => {
+httpServer.listen(port, () => {
 	if (server.get("env") === "production") {
 		console.log("Server is running on CLOUD on Port: ", port);
 	} else {

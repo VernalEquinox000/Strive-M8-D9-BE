@@ -15,6 +15,7 @@ const addUserToRoom = async ({ username, socketId, room }) => {
       },
       {"members.$.socketId": socketId})
     } else {
+      console.log("room", room)
       const newRoom = await RoomModel.findOneAndUpdate({
         name: room,
       }, {
@@ -46,7 +47,7 @@ const getUsersBySocket = async (roomName, socketId) => {
   try {
     const room = await RoomModel.findOne({ name: roomName })
     console.log(room)
-    console.log(socketId)
+    //console.log(socketId)
     const user = room.members.find(user => user.socketId === socketId)
     return user
  } catch (error) {
